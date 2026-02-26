@@ -3,8 +3,7 @@ const cors = require('cors');
 const mongoose = require('mongoose'); // 1. Sai o 'fs', entra o Mongoose!
 
 const app = express();
-const port = 3000;
-
+const port = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
@@ -168,4 +167,5 @@ app.post('/treinador', (req, res) => {
 
 app.listen(port, () => {
   console.log(`API com gravação em disco rodando em http://localhost:${port}`);
+
 });
