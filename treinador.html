@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Treinador Virtual</title>
+    <link rel="stylesheet" href="style.css"> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Treinador Virtual 🤖</h1>
+        
+        <form id="form-treinador">
+            <label for="altura">Altura (m):</label>
+            <input type="number" id="altura" step="0.01" value="1.74" required>
+
+            <label for="pesoObjetivo">Peso Alvo (kg):</label>
+            <input type="number" id="pesoObjetivo" step="0.1" value="65.0" required>
+
+            <label for="pesoAtual">Peso Atual (kg):</label>
+            <input type="number" id="pesoAtual" step="0.1" placeholder="Ex: 70.5" required>
+
+            <label for="diasTreino">Dias de treino por semana:</label>
+            <input type="number" id="diasTreino" min="0" max="7" value="4" required>
+
+            <label for="orcamento">Condição Financeira / Local:</label>
+            <select id="orcamento" required>
+                <option value="economico">Econômico (Treino em Casa / Ar Livre)</option>
+                <option value="academia">Mensalidade (Academia / Studio)</option>
+            </select>
+
+            <label for="nivel">Nível de Experiência:</label>
+            <select id="nivel" required>
+                <option value="iniciante">Iniciante / Voltando agora</option>
+                <option value="avancado">Avançado / Alta Performance</option>
+            </select>
+
+            <button type="submit">Calcular Plano de Ação ✨</button>
+        </form>
+
+        <div id="resultado" style="margin-top: 20px; font-weight: bold; color: #880e4f; text-align: left;"></div>
+
+        <button id="btn-pdf" style="display: none; margin-top: 20px; background: linear-gradient(45deg, #5a3a45, #880e4f); color: white;">Baixar Plano em PDF 📄</button>
+    </div>
+
+    <script>
+        const formTreinador = document.getElementById('form-treinador');
+        const divResultado = document.getElementById('resultado');
+        const btnPdf = document.getElementById('btn-pdf');
+
+        formTreinador.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Esconde o botão caso o usuário faça um novo cálculo
+            btnPdf.style.display = 'none';
+
+            const dados = {
+                altura: parseFloat(document.getElementById('altura').value),
+                pesoObjetivo: parseFloat(document.getElementById('pesoObjetivo').value),
+                pesoAtual: parseFloat(document.getElementById('pesoAtual').value),
+                diasTreino: parseInt(document.getElementById('diasTreino').value),
+                orcamento: document.getElementById('orcamento').value,
+                nivel: document.getElementById('nivel').value
+            };
+
+            divResultado.innerHTML = "Analisando o perfil... ⏳";
+
+            fetch('http://localhost:3000/treinador', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dados)
+            })
+            .then(response => response.json())
+            .then(data => {
+                // 1. Criamos a base com os dados iniciais
+                let htmlHTML = `
+                    <p><strong>Seu IMC:</strong> ${data.imc}</p>
+                    <p><strong>Estratégia:</strong> ${data.diagnostico}</p>
+                    <p><strong>Calorias:</strong> ${data.dieta}</p>
+                    
+                    <div class="treino-box">
+                        <h2>${data.treino.titulo}</h2>
+                `;
+
+                // 2. Loop para montar as fases e exercícios dinamicamente
+                data.treino.fases.forEach(fase => {
+                    htmlHTML += `<h3>${fase.hora} | ${fase.nome}</h3><ul>`;
+                    fase.exercicios.forEach(exercicio => {
+                        htmlHTML += `<li>${exercicio}</li>`;
+                    });
+                    htmlHTML += `</ul>`;
+                });
+
+                // 3. Montamos a estrutura da tabela HTML
+                htmlHTML += `
+                    <h3>📊 Tabela de Treinamento</h3>
+                    <table class="treino-table">
+                        <tr>
+                            <th>Foco / Tipo</th>
+                            <th>Exercício / Aparelho</th>
+                        </tr>
+                `;
+
+                // 4. Loop para preencher as linhas da tabela
+                data.treino.tabela.forEach(linha => {
+                    htmlHTML += `
+                        <tr>
+                            <td>${linha.foco}</td>
+                            <td>${linha.acao}</td>
+                        </tr>
+                    `;
+                });
+
+                htmlHTML += `</table>`;
+
+                // 5. Adiciona o aviso, se existir
+                if (data.treino.aviso) {
+                    htmlHTML += `<p style="font-size: 0.8rem; color: #880e4f; margin-top: 15px;"><em>${data.treino.aviso}</em></p>`;
+                }
+
+                htmlHTML += `</div>`; // Fecha a caixa do treino
+
+                // Injeta tudo na tela
+                divResultado.innerHTML = htmlHTML;
+
+                // AGORA SIM: Mostra o botão de PDF depois que o HTML está pronto na tela!
+                btnPdf.style.display = 'block';
+            })
+            .catch(error => {
+                console.error("Erro na requisição:", error);
+                divResultado.innerHTML = "<p style='color: red;'>Erro ao conectar com o servidor. Verifique se a API está rodando.</p>";
+            });
+        });
+
+        // Ação do botão de gerar PDF (Versão à prova de falhas)
+    document.getElementById('btn-pdf').addEventListener('click', function() {
+        const elemento = document.getElementById('resultado');
+        const botao = this; // Salva o botão em uma variável para não perdermos a referência
+
+        botao.textContent = "Gerando PDF... ⏳";
+
+        // Verifica se a biblioteca do PDF realmente foi baixada da internet
+        if (typeof html2pdf === 'undefined') {
+            alert("Erro: A ferramenta de PDF não carregou. Verifique o link no <head> do seu HTML.");
+            botao.textContent = "Baixar Plano em PDF 📄";
+            return; // Para a execução aqui
+        }
+
+       // Configurações corrigidas à prova de bugs
+        const opcoes = {
+            margin:       [10, 10, 10, 10], // Margem em todos os lados
+            filename:     'Plano_Treino_Mirian.pdf',
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { 
+                scale: 2, // Mantém a resolução alta
+                scrollY: 0, // 🐛 A MÁGICA ESTÁ AQUI: Corrige o bug da rolagem (tela em branco)
+                windowY: 0,
+                useCORS: true // Garante que as fontes do Google e emojis carreguem no PDF
+            },
+            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+        
+        // Tenta gerar o PDF. Se der certo cai no 'then', se der erro cai no 'catch'
+        html2pdf().set(opcoes).from(elemento).save()
+        .then(() => {
+            botao.textContent = "Baixar Plano em PDF 📄";
+        })
+        .catch(erro => {
+            console.error("Ocorreu um erro interno:", erro);
+            alert("Deu um erro ao tentar gerar o PDF. Aperte F12 e olhe a aba Console.");
+            botao.textContent = "Baixar Plano em PDF 📄";
+        });
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,183 @@
+/* Estilos inspirados na estética "Tesla Sakura" */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display:wght@700&display=swap');
+
+body {
+    /* Fundo rosa claro e suave */
+    background-color: #fce4ec; 
+    /* Opcional: Adicionar uma imagem de fundo de flores de cerejeira */
+    background-image: url('https://i.pinimg.com/originals/c6/f9/69/c6f9691c785810180897098849141181.jpg'); /* Exemplo de imagem floral */
+    background-size: cover;
+    background-attachment: fixed;
+    background-blend-mode: soft-light;
+    font-family: 'Montserrat', sans-serif;
+    color: #5a3a45; /* Cor de texto vinho suave */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+/* Container principal da aplicação */
+.container {
+    background-color: rgba(255, 255, 255, 0.9); /* Fundo branco com leve transparência */
+    padding: 40px;
+    border-radius: 20px; /* Bordas bem arredondadas */
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1); /* Sombra suave para dar profundidade */
+    text-align: center;
+    max-width: 450px;
+    width: 100%;
+    border: 2px solid #f8bbd0; /* Borda rosa delicada */
+}
+
+/* Estilo do título */
+h1 {
+    font-family: 'Playfair Display', serif; /* Fonte mais elegante para o título */
+    color: #c2185b; /* Rosa mais forte, estilo "Gong cha" da imagem */
+    margin-bottom: 30px;
+    font-size: 2.5rem;
+}
+
+/* Estilo dos rótulos e campos do formulário */
+label {
+    display: block;
+    text-align: left;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #880e4f;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 2px solid #f06292; /* Borda rosa vibrante */
+    border-radius: 10px;
+    background-color: #fff0f5; /* Fundo do input rosa bem clarinho */
+    font-family: 'Montserrat', sans-serif;
+    color: #5a3a45;
+    box-sizing: border-box; /* Garante que o padding não quebre o layout */
+    transition: border-color 0.3s;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #c2185b; /* Muda a cor da borda ao clicar */
+}
+
+/* Estilo do botão */
+button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 30px; /* Botão bem redondo */
+    /* Gradiente inspirado nas cores do carro e da bebida */
+    background: linear-gradient(45deg, #ec407a, #c2185b); 
+    color: white;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+button:hover {
+    transform: translateY(-3px); /* Efeito de "levantar" ao passar o mouse */
+    box-shadow: 0 5px 15px rgba(194, 24, 91, 0.4);
+    background: linear-gradient(45deg, #f06292, #ad1457);
+}
+
+/* Mensagem de status */
+#mensagem {
+    margin-top: 20px;
+    font-size: 1rem;
+}
+
+/* =========================================
+   ESTILOS DO TREINO "CHASSI DE AÇO" (SAKURA)
+   ========================================= */
+
+/* Caixa principal do treino */
+.treino-box {
+    background-color: #fff0f5; /* Fundo rosa bem clarinho */
+    padding: 25px;
+    border-radius: 15px;
+    border-left: 6px solid #ec407a; /* Borda lateral grossa e vibrante */
+    margin-top: 25px;
+    box-shadow: 0 4px 15px rgba(236, 64, 122, 0.1);
+    text-align: left;
+}
+
+/* Títulos dentro da caixa */
+.treino-box h2 {
+    color: #880e4f;
+    margin-top: 0;
+    font-family: 'Playfair Display', serif;
+    border-bottom: 2px dashed #f8bbd0; /* Linha tracejada elegante */
+    padding-bottom: 10px;
+}
+
+.treino-box h3 {
+    color: #c2185b;
+    font-size: 1.1rem;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+/* Customização das Listas (Tirando a bolinha e colocando flores) */
+.treino-box ul {
+    list-style-type: none; 
+    padding-left: 0;
+}
+
+.treino-box ul li {
+    margin-bottom: 8px;
+    padding-left: 25px;
+    position: relative;
+    color: #5a3a45;
+    line-height: 1.5;
+}
+
+.treino-box ul li::before {
+    content: '🌸'; /* O marcador personalizado! */
+    position: absolute;
+    left: 0;
+    font-size: 0.9rem;
+    top: 2px;
+}
+
+/* =========================================
+   ESTILIZAÇÃO PROFISSIONAL DA TABELA
+   ========================================= */
+.treino-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden; /* Mantém os cantos da tabela arredondados */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.treino-table th {
+    background-color: #f8bbd0; /* Cabeçalho rosa */
+    color: #880e4f;
+    padding: 12px;
+    text-align: left;
+    font-weight: bold;
+}
+
+.treino-table td {
+    padding: 12px;
+    border-bottom: 1px solid #fce4ec; /* Linha sutil separando as fileiras */
+    color: #5a3a45;
+}
+
+.treino-table tr:last-child td {
+    border-bottom: none; /* Tira a linha da última fileira */
+}
+
+/* Efeito interativo: a linha muda de cor quando o mouse passa por cima */
+.treino-table tr:hover {
+    background-color: #fff0f5; 
+    transition: background-color 0.3s;
+}
