@@ -65,7 +65,7 @@
 
             divResultado.innerHTML = "Analisando o perfil... ⏳";
 
-            fetch('http://localhost:3000/treinador', {
+            fetch('https://api-alta-performance.onrender.com/treinador', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(dados)
@@ -173,4 +173,5 @@
     });
     </script>
 </body>
+
 </html>
